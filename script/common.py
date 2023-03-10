@@ -4,6 +4,7 @@ from os import path
 
 class Project(Enum):
     Project1 = 1
+    Project2 = 2
 
 
 CONNECTION_CONFIG = {
