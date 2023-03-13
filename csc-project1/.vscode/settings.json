@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "regex": "c",
+        "sstream": "c",
+        "__mutex_base": "c",
+        "atomic": "c",
+        "barrier": "c",
+        "condition_variable": "c",
+        "future": "c",
+        "latch": "c"
+    }
+}
