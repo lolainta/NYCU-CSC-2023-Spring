@@ -19,5 +19,7 @@ all: $(HIJACK)
 $(HIJACK): src/main.c $(DEPS)
 	$(CC) $^ -o $@ $(CFLAGS) $(DFLAG)
 
+run: $(HIJACK)
+	sudo ./$(HIJACK) ens18
 clean:
 	rm -f $(HIJACK)

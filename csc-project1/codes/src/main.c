@@ -49,14 +49,17 @@ void ipsec_hijack(char *INTERFACE)
     *test_for_dissect = true;
     char* victim_ip = (char*)malloc(sizeof(char)*64);
     char* server_ip = (char*)malloc(sizeof(char)*64);
+//    printf("[%s]:%d Move on\n",__FILE__,__LINE__);
     while(1){
         /*you have to get the information from the packet you are sniffing*/
         get_info(&dev, &net, &esp, &txp, state, victim_ip, server_ip, test_for_dissect);
+//    	printf("[%s]:%d Move on\n",__FILE__,__LINE__);
+//	printf("%d: state=%d\n",__LINE__,*state);
 
         if(first){
             first = false;
-            strcpy(victim_ip, net.src_ip);
-            strcpy(server_ip, net.dst_ip);
+            memcpy(victim_ip, net.src_ip, 4);
+            memcpy(server_ip, net.dst_ip, 4);
         }
 
         if(*state == SEND_ACK){
@@ -69,11 +72,13 @@ void ipsec_hijack(char *INTERFACE)
             get_info(&dev, &net, &esp, &txp, state, victim_ip, server_ip, test_for_dissect);
         }
 
+/*
         char const * const x_src_ip = strdup(net.x_src_ip);
         char const * const x_dst_ip = strdup(net.x_dst_ip);
 
-        strcpy(net.x_src_ip, x_src_ip);
-        strcpy(net.x_dst_ip, x_dst_ip);
+        memcpy(net.x_src_ip, x_src_ip, 4);
+        memcpy(net.x_dst_ip, x_dst_ip, 4);
+*/
 
         FD_ZERO(&readfds);
         FD_SET(fileno(stdin), &readfds);
@@ -91,6 +96,7 @@ void ipsec_hijack(char *INTERFACE)
             send_msg(&dev, &net, &esp, &txp, str);
             *state = WAIT_SECRET;
         }
+//	printf("%d: state=%d\n",__LINE__,*state);
     }
 }
 

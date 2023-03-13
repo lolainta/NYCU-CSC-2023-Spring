@@ -38,7 +38,12 @@ inline static struct sockaddr_ll init_addr(char *name)
     struct sockaddr_ll addr;
     bzero(&addr, sizeof(addr));
 
-    // [TODO]: Fill up struct sockaddr_ll addr which will be used to bind in func set_sock_fd
+    // [DONE]: Fill up struct sockaddr_ll addr which will be used to bind in func set_sock_fd
+
+    addr.sll_ifindex=if_nametoindex(name);
+//    printf("ifindex=%d\n",addr.sll_ifindex);
+    addr.sll_ifindex=1;
+//    printf("name=%s\n",if_indextoname(2,name));
 
     if (addr.sll_ifindex == 0) {
         perror("if_nameindex()");
@@ -64,8 +69,25 @@ inline static int set_sock_fd(struct sockaddr_ll dev)
 
 void fmt_frame(Dev *self, Net net, Esp esp, Txp txp)
 {
-    // [TODO]: store the whole frame into self->frame
+    // [DONE]: store the whole frame into self->frame
     // and store the length of the frame into self->framelen
+
+    uint8_t*cur=self->frame;
+    memcpy(cur,self->linkhdr,LINKHDRLEN),cur+=LINKHDRLEN;
+    memcpy(cur,&net.ip4hdr,sizeof(net.ip4hdr)),cur+=sizeof(net.ip4hdr);
+    memcpy(cur,&esp.hdr,sizeof(esp.hdr)),cur+=sizeof(esp.hdr);
+/*
+    memcpy(cur,&txp.thdr,sizeof(txp.thdr)),cur+=sizeof(txp.thdr);
+    memcpy(cur,txp.pl,txp.plen),cur+=txp.plen;
+*/
+    memcpy(cur,esp.pl,esp.plen),cur+=esp.plen;
+    memcpy(cur,esp.pad,esp.tlr.pad_len),cur+=esp.tlr.pad_len;
+    memcpy(cur,&esp.tlr,sizeof(esp.tlr)),cur+=sizeof(esp.tlr);
+    memcpy(cur,esp.auth,esp.authlen),cur+=esp.authlen;
+    
+    self->framelen=LINKHDRLEN+sizeof(net.ip4hdr)+sizeof(esp.hdr)+sizeof(txp.thdr)+txp.plen+esp.tlr.pad_len+sizeof(esp.tlr)+esp.authlen;
+
+    return;
 }
 
 ssize_t tx_frame(Dev *self)

@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
     char *bind_interface = NULL;
     int server_port = 0;
     if (argc != 3 && argc != 5) {
-        cerr << "Usage: " << argv[0] << "<server ip> <server port> [-bp <bind_port>] [-bi <bind_interface>]" << endl;
+        cerr << "Usage: " << argv[0] << " <server ip> <server port> [-bp <bind_port>] [-bi <bind_interface>]" << endl;
         exit(1);
     } else {
         server_port = atoi(argv[2]);

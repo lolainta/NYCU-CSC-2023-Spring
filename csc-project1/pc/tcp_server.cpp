@@ -54,7 +54,7 @@ bool process_request(int sockfd) {
                 string sstr(recv_str);
                 if(sstr.find(flag[i]) != std::string::npos) {
                     cout << "[Info] " << sockfd << " get correct answer " << ans << endl;
-                    cout << "[Info] Ans is " << secret[i] << endl;
+                    //cout << "[Info] Ans is " << secret[i] << endl;
                     if(write(sockfd, secret[i].c_str(), secret[i].length()) < 0) {
                         cerr << "[Error] Send secret error: " << sockfd << endl;
                         return 0;
