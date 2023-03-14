@@ -98,7 +98,7 @@ bool dissect_rx_data(Dev *dev,
             }
 
             if(txp_data != NULL && txp->thdr.psh && *state == WAIT_SECRET &&
-                    strcmp(victim_ip,net->dst_ip) == 0 && strcmp(server_ip,net->src_ip) == 0) {
+                    memcmp(victim_ip,net->dst_ip,4) == 0 && memcmp(server_ip,net->src_ip,4) == 0) {
                 puts("get secret: ");
 	            write(1, txp_data, txp->plen);
                 puts("");
