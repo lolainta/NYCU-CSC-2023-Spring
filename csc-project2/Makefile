@@ -2,10 +2,10 @@ VENV = .env
 PYTHON = $(VENV)/bin/python3
 PIP = $(VENV)/bin/pip
 
-.PHONY: clean run
+.PHONY: clean spoof
 
-run: $(VENV)/bin/activate
-	$(PYTHON) main.py
+spoof: $(VENV)/bin/activate
+	$(PYTHON) spoof.py
 
 
 $(VENV)/bin/activate: requirements.txt
