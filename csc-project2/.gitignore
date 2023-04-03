@@ -1,1 +1,6 @@
 .env/
+log/
+mitm_attack
+ca.crt
+ca.key
+connection.log
