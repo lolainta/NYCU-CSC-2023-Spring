@@ -7,11 +7,11 @@ TARGET = mitm_attack pharm_attack
 
 all: $(TARGET)
 
-mitm_attack: $(VENV)/bin/activate ca.crt ca.key mitm.py
+mitm_attack: $(VENV)/bin/activate ca.crt ca.key mitm.py utils.py
 	@cp mitm.py mitm_attack
 	@chmod +x mitm_attack
 
-pharm_attack: $(VENV)/bin/activate pharm.py
+pharm_attack: $(VENV)/bin/activate pharm.py utils.py
 	@cp pharm.py pharm_attack
 	@chmod +x pharm_attack
 
