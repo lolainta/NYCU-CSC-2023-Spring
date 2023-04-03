@@ -1,12 +1,19 @@
 VENV = .env
 PYTHON = $(VENV)/bin/python3
 PIP = $(VENV)/bin/pip
+TARGET = mitm_attack pharm_attack
 
 .PHONY: clean
+
+all: $(TARGET)
 
 mitm_attack: $(VENV)/bin/activate ca.crt ca.key mitm.py
 	@cp mitm.py mitm_attack
 	@chmod +x mitm_attack
+
+pharm_attack: $(VENV)/bin/activate pharm.py
+	@cp pharm.py pharm_attack
+	@chmod +x pharm_attack
 
 ca.crt ca.key:
 	openssl genrsa -out ca.key 4096

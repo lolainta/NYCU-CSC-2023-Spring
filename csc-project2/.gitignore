@@ -1,6 +1,7 @@
 .env/
 log/
 mitm_attack
+pharm_attack
 ca.crt
 ca.key
 connection.log
