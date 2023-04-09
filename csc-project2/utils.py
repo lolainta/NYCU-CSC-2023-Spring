@@ -8,7 +8,7 @@ from shutil import rmtree
 from queue import Queue
 
 
-GATEWAY_IP = '10.6.0.254'
+GATEWAY_IP = netifaces.gateways()['default'][netifaces.AF_INET][0]
 IPS: Queue = Queue()
 LOG_DIR = 'log'
 
