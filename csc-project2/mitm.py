@@ -1,4 +1,4 @@
-#!./.env/bin/python
+#!/usr/bin/python
 from threading import Thread
 from time import sleep
 from utils import get_victims, trick, sslsplit, LOG_DIR

@@ -1,4 +1,4 @@
-#!./.env/bin/python
+#!/usr/bin/python
 from netfilterqueue import NetfilterQueue
 from threading import Thread
 from time import sleep
