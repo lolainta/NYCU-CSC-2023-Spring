@@ -17,4 +17,5 @@ attack_server:
 
 clean:
 	rm -rf __pycache__
-	rm -rf $(TARGET)
+	rm -f $(TARGET)
+	rm -f infected_cat
