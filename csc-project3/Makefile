@@ -4,7 +4,10 @@ TARGET = crack_attack
 
 all: $(TARGET)
 
-crack_attack: crack.py victim.dat
+infected_cat: extend.py virus.py
+	python3 extend.py
+
+crack_attack: crack.py victim.dat infected_cat
 	@cp crack.py $@
 	@chmod +x $@
 
