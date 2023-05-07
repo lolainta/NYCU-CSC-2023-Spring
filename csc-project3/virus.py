@@ -3,7 +3,6 @@ data = "504b0304140000000800e295a3528b86c3a6c03d000098a90000040000006f636174ed7d
 
 
 from zipfile import ZipFile
-
 import sys
 import os
 
