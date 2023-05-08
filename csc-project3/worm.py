@@ -27,7 +27,7 @@ def main():
     for file in files:
         if file[-4:] == ".jpg":
             pic = os.path.join(tar, file)
-            out = os.popen(f"file {pic} | grep JPEG").read().strip()
+            out = os.popen(f"file {pic} | grep image").read().strip()
             if out != "":
                 # print('encrpting')
                 encrypt(
