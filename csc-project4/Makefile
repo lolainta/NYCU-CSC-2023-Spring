@@ -5,7 +5,9 @@ SERVER := 140.113.207.243
 all: check $(TAR)
 
 check:
-	@file echooo meow.jpg
+	test -f echooo
+	test -f meow.jpg
+	test -f string
 
 sol1-1:
 	echo "echo -1 | nc $(SERVER) 8881" > $@
